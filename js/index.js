@@ -25,16 +25,17 @@ function renderTasks(data) {
     const fechaFin = new Date().getTime();
     const diff = fechaFin - fechaInicio;
     const format_date = Math.round(diff / (1000 * 60 * 60 * 24));
+    const {title, body, id} = task;
     main.innerHTML += `
     <div class="col-4">
       <div class="card mb-2">
         <div class="card-body">
-          <h4>${task.title}</h2>
+          <h4>${title}</h2>
           <p>
-            ${task.body}
+            ${body}
           </p>
           <p class="card-text"><small class="text-muted">Creado hace ${format_date} días</small></p>
-          <a href="./detail.html?id=${task.id}" class="btn btn-primary">Revisar</a>
+          <a href="./detail.html?id=${id}" class="btn btn-primary">Revisar</a>
         </div>
       </div>
     </div>`;
@@ -42,21 +43,22 @@ function renderTasks(data) {
 }
 
 function renderTodo(data) {
+  const {title, body : bodyTodo, status, created_at, id} = data;
   body.innerHTML = `
   <div class="col-lg-8 mx-auto p-4 py-md-5">
     <main>
       <h1>Detalle</h1>
       <p class="fs-5 col-md-8">
-        Título: ${data.title}
+        Título: ${title}
       </p>
       <p class="fs-5 col-md-8">
-        ${data.body}
+        ${bodyTodo}
       </p>
-      <p class="fs-5 col-md-8"><small>Estado: ${data.status}</small></p>
-      <p class="fs-5 col-md-8"><small>Fecha de creación: ${data.created_at}</small></p>
+      <p class="fs-5 col-md-8"><small>Estado: ${status}</small></p>
+      <p class="fs-5 col-md-8"><small>Fecha de creación: ${created_at}</small></p>
       <div class="mb-5">
         <a href="/" class="btn btn-primary">Regresar</a>
-        <a href="#" class="btn btn-primary">Editar</a>
+        <a href="./edit.html?id=${id}" class="btn btn-primary">Editar</a>
         <button onclick="deleteTodo()" class="btn btn-danger">Eliminar</button>
       </div>
     </main>

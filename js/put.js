@@ -1,15 +1,15 @@
-
 const formTodo = document.getElementById('form');
 const title = document.getElementById('title');
 const body = document.getElementById('body');
-const status = document.getElementById('status');
+const statusTodo = document.getElementById('status');
 let msg = document.getElementById("msg");
 let msg1 = document.getElementById("msg1");
+const id = new URLSearchParams(window.location.search).get("id");
+
 formTodo.addEventListener('submit', (event) => {
     event.preventDefault();
     formValidation();
 });
-
 
 let formValidation = () => {
   if (title.value === "") {
@@ -32,8 +32,8 @@ async function acceptData(){
         status: status.value,
         author: 1
     }
-    await fetch("http://127.0.0.1:8000/api/v4/todo/", {
-        method: "POST",
+    await fetch(`http://127.0.0.1:8000/api/v4/todo/${id}/`, {
+        method: "PUT",
         mode: "cors",
         headers: {
             'Content-Type': 'application/json'
@@ -42,12 +42,12 @@ async function acceptData(){
     }).then((response)=>{
         if (response.ok){
             Swal.fire(
-                '¡Creado!',
-                'Los datos se guardaron correctamente',
+                '¡Actualizado!',
+                'Los datos se actualizaron correctamente',
                 'success'
               ).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.replace("./index.html");
+                    returnTodo();
                 }
             }) 
         }
@@ -60,3 +60,21 @@ async function acceptData(){
         }
     })
 }
+
+async function setData(){
+    try {
+        const response = await fetch(`http://127.0.0.1:8000/api/v4/todo/${id}/`);
+        const data = await response.json();
+        title.value = data.title;
+        body.value = data.body;
+        statusTodo.value = data.status;
+      } catch (error) {
+        console.log(error);
+      }
+}
+
+function returnTodo(){
+    window.location.replace(`./detail.html?id=${id}`);
+}
+
+setData();
